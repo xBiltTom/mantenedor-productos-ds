@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, Download, Loader2, ChevronDown } from 'lucide-react';
+import { FileText, Download, Loader2, ChevronDown, Filter } from 'lucide-react';
 import api from '../services/api';
+import CustomSelect from '../components/CustomSelect';
 
 export default function ReportsPage() {
   const [categoria, setCategoria] = useState('');
@@ -70,19 +71,12 @@ export default function ReportsPage() {
               <label className="text-xs font-semibold text-zinc-700 uppercase tracking-wider">
                 Filtrar por Categoría
               </label>
-              <div className="relative">
-                <select
-                  value={categoria}
-                  onChange={(e) => setCategoria(e.target.value)}
-                  className="w-full appearance-none bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm rounded-xl focus:ring-2 focus:ring-zinc-950 focus:border-zinc-950 block p-3 pr-10 transition-colors cursor-pointer"
-                >
-                  <option value="">Todas las categorías</option>
-                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <ChevronDown size={16} className="text-zinc-500" />
-                </div>
-              </div>
+              <CustomSelect
+                icon={Filter}
+                value={categoria}
+                onChange={e => setCategoria(e.target.value)}
+                options={[{ value: '', label: 'Todas las categorías' }, ...categories.map(c => ({ value: c, label: c }))]}
+              />
             </div>
           </div>
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import api from '../services/api';
 import { Package, Plus, Search, Filter, Pencil, Trash2, ChevronLeft, ChevronRight, X, AlertTriangle, Check } from 'lucide-react';
+import CustomSelect from '../components/CustomSelect';
 
 // ─── Reusable input ──────────────────────────────────────────────────────────
 function Field({ label, required, error, children }) {
@@ -46,17 +47,7 @@ function Input({ disabled, ...props }) {
   );
 }
 
-function Select({ ...props }) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <select
-      {...props}
-      style={{ ...inputStyle, ...(focused ? inputFocusStyle : {}), cursor: 'pointer', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A7A74' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', paddingRight: '36px' }}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
-    />
-  );
-}
+// Select function replaced by CustomSelect component
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
 function Modal({ isOpen, onClose, title, children, size = 'md' }) {
@@ -192,10 +183,11 @@ function ProductForm({ editing, onSave, onClose }) {
             />
           </Field>
           <Field label="Categoría">
-            <Select value={formData.categoria} onChange={e => set('categoria', e.target.value)}>
-              <option value="">Sin categoría</option>
-              {categoriesList.map(c => <option key={c} value={c}>{c}</option>)}
-            </Select>
+            <CustomSelect 
+              value={formData.categoria} 
+              onChange={e => set('categoria', e.target.value)}
+              options={[{ value: '', label: 'Sin categoría' }, ...categoriesList.map(c => ({ value: c, label: c }))]}
+            />
           </Field>
         </div>
         <div style={{ marginTop: '14px' }}>
@@ -386,18 +378,13 @@ export default function ProductsPage() {
             />
           </div>
 
-          <div style={{ position: 'relative', width: '200px' }}>
-            <Filter size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#A8A8A0', pointerEvents: 'none' }} />
-            <select
+          <div style={{ width: '200px' }}>
+            <CustomSelect
+              icon={Filter}
               value={categoria}
               onChange={e => setCategoria(e.target.value)}
-              style={{ ...inputStyle, paddingLeft: '38px', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A7A74' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', paddingRight: '36px', cursor: 'pointer' }}
-              onFocus={e => { e.currentTarget.style.borderColor = '#0E0E0D'; }}
-              onBlur={e => { e.currentTarget.style.borderColor = '#E5E5E2'; }}
-            >
-              <option value="">Todas las categorías</option>
-              {categoriesList.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
+              options={[{ value: '', label: 'Todas las categorías' }, ...categoriesList.map(c => ({ value: c, label: c }))]}
+            />
           </div>
 
           <button
