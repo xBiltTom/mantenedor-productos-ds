@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Package, FileText, Hexagon } from 'lucide-react';
+import { LayoutDashboard, Package, FileText, Hexagon, X } from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -8,7 +8,7 @@ const navItems = [
   { to: '/reports', label: 'Reportes', icon: FileText }
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, setIsOpen }) {
   const [apiStatus, setApiStatus] = useState('checking'); // 'checking', 'online', 'offline'
 
   useEffect(() => {
@@ -79,31 +79,35 @@ export default function Sidebar() {
           50% { opacity: 0.4; }
         }
       `}</style>
-      <aside style={{
-        position: 'fixed',
-        top: 0, left: 0, bottom: 0,
-        width: '260px',
-        display: 'flex',
-        flexDirection: 'column',
-        background: '#FFFFFF',
-        borderRight: '1px solid #E5E5E2',
-        zIndex: 40,
-      }}>
+      <aside 
+        className={`fixed top-0 left-0 bottom-0 w-[260px] flex flex-col bg-white border-r z-50 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+        style={{ borderColor: '#E5E5E2' }}
+      >
         {/* Logo */}
-        <div style={{ padding: '28px 24px 24px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid #E5E5E2' }}>
-          <div style={{
-            width: '36px', height: '36px',
-            background: '#0E0E0D',
-            borderRadius: '10px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-          }}>
-            <Hexagon size={18} fill="#F8F8F6" color="#F8F8F6" strokeWidth={0} />
+        <div style={{ padding: '28px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E5E5E2' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '36px', height: '36px',
+              background: '#0E0E0D',
+              borderRadius: '10px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <Hexagon size={18} fill="#F8F8F6" color="#F8F8F6" strokeWidth={0} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '15px', letterSpacing: '-0.02em', color: '#0E0E0D', lineHeight: 1.2 }}>SGP</div>
+              <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7A7A74', fontWeight: 500, marginTop: '2px' }}>Gestión de Inventario</div>
+            </div>
           </div>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: '15px', letterSpacing: '-0.02em', color: '#0E0E0D', lineHeight: 1.2 }}>SGP</div>
-            <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7A7A74', fontWeight: 500, marginTop: '2px' }}>Gestión de Inventario</div>
-          </div>
+          
+          {/* Botón cerrar para móvil */}
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="md:hidden p-2 -mr-2 text-[#7A7A74] hover:bg-[#F0F0EC] hover:text-[#0E0E0D] rounded-lg transition-colors"
+          >
+            <X size={20} strokeWidth={2.5} />
+          </button>
         </div>
 
         {/* Nav */}
