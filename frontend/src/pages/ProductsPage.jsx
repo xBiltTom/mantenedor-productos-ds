@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../services/api';
 import { Package, Plus, Search, Filter, Pencil, Trash2, ChevronLeft, ChevronRight, X, AlertTriangle, Check } from 'lucide-react';
 
@@ -72,13 +73,15 @@ function Modal({ isOpen, onClose, title, children, size = 'md' }) {
 
   const maxW = size === 'lg' ? '640px' : '520px';
 
-  return (
+  return createPortal(
     <div
-      style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', background: 'rgba(14,14,13,0.5)', backdropFilter: 'blur(4px)', animation: 'overlayEnter 0.2s ease both' }}
+      className="md:pl-[260px]"
+      style={{ position: 'fixed', inset: 0, zIndex: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', background: 'rgba(14,14,13,0.6)', backdropFilter: 'blur(6px)', animation: 'overlayEnter 0.2s ease both' }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div style={{ background: '#fff', borderRadius: '20px', boxShadow: '0 25px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: maxW, overflow: 'hidden', animation: 'modalEnter 0.25s cubic-bezier(0.22,1,0.36,1) both' }}>
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid #F0F0EC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FAFAF8' }}>
+      <div style={{ background: '#fff', borderRadius: '20px', boxShadow: '0 32px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.06)', width: '100%', maxWidth: maxW, display: 'flex', flexDirection: 'column', maxHeight: 'calc(100vh - 40px)', animation: 'modalEnter 0.25s cubic-bezier(0.22,1,0.36,1) both' }}>
+        {/* Header — never scrolls */}
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid #F0F0EC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FAFAF8', borderRadius: '20px 20px 0 0', flexShrink: 0 }}>
           <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.02em', color: '#0E0E0D' }}>{title}</h3>
           <button
             onClick={onClose}
@@ -89,9 +92,11 @@ function Modal({ isOpen, onClose, title, children, size = 'md' }) {
             <X size={18} />
           </button>
         </div>
-        <div style={{ padding: '24px' }}>{children}</div>
+        {/* Body — scrolls if content overflows */}
+        <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
