@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F8F8F6;
+    --foreground: #0E0E0D;
+    --card: #FFFFFF;
+    --card-foreground: #0E0E0D;
+    --border: #E5E5E2;
+    --input: #E5E5E2;
+    --ring: #0E0E0D;
+    --primary: #0E0E0D;
+    --primary-foreground: #F8F8F6;
+    --secondary: #F0F0EC;
+    --secondary-foreground: #0E0E0D;
+    --muted: #F0F0EC;
+    --muted-foreground: #7A7A74;
+    --accent: #EAEAE5;
+    --accent-foreground: #0E0E0D;
+    --destructive: #D93636;
+    --destructive-foreground: #F8F8F6;
+    --radius: 0.75rem;
+  }
+
+  * {
+    border-color: var(--border);
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #0E0E0D;
+    color: #F8F8F6;
+  }
+}
+
+@layer utilities {
+  /* Page entry animations — CSS native, no plugin needed */
+  .page-enter {
+    animation: pageEnter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .fade-up {
+    animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .fade-up-delay-1 { animation-delay: 0.08s; }
+  .fade-up-delay-2 { animation-delay: 0.16s; }
+  .fade-up-delay-3 { animation-delay: 0.24s; }
+  .fade-up-delay-4 { animation-delay: 0.32s; }
+
+  .modal-enter {
+    animation: modalEnter 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .overlay-enter {
+    animation: overlayEnter 0.2s ease both;
+  }
+
+  .font-mono-dm {
+    font-family: 'DM Mono', monospace;
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes overlayEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D4D4CE;
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A8A8A0;
+}
