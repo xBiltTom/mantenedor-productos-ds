@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Package, FileText, Hexagon, X } from 'lucide-react';
+import { LayoutDashboard, Package, Tags, FileText, Hexagon, X } from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/products', label: 'Productos', icon: Package },
+  { to: '/categories', label: 'Categorías', icon: Tags },
   { to: '/reports', label: 'Reportes', icon: FileText }
 ];
 

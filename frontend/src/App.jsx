@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react';
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const ProductsPage = lazy(() => import('./pages/ProductsPage'));
+const CategoriesPage = lazy(() => import('./pages/CategoriesPage'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 
 const Spinner = () => (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/products" element={<ProductsPage />} />
+          <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/reports" element={<ReportsPage />} />
         </Routes>
       </Suspense>

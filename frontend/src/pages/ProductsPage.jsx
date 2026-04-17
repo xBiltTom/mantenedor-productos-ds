@@ -115,12 +115,22 @@ function NumberInput({ value, onChange, min = 0, step = 1, prefix }) {
   );
 }
 
-const categoriesList = ['Tecnología', 'Oficina', 'Hogar', 'Industrial'];
-
+// categories loaded dynamically from the API
 const emptyForm = { sku: '', nombre: '', categoria: '', precio_compra: '', precio_venta: '', stock_actual: 0, stock_minimo: 5 };
+
+function useCategories() {
+  const [categories, setCategories] = React.useState([]);
+  React.useEffect(() => {
+    api.get('/categories')
+      .then(res => setCategories(res.data))
+      .catch(() => setCategories([]));
+  }, []);
+  return categories;
+}
 
 // ─── Product Form ─────────────────────────────────────────────────────────────
 function ProductForm({ editing, onSave, onClose }) {
+  const categories = useCategories();
   const [formData, setFormData] = useState(editing ? { ...editing } : { ...emptyForm });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -186,7 +196,7 @@ function ProductForm({ editing, onSave, onClose }) {
             <CustomSelect 
               value={formData.categoria} 
               onChange={e => set('categoria', e.target.value)}
-              options={[{ value: '', label: 'Sin categoría' }, ...categoriesList.map(c => ({ value: c, label: c }))]}
+              options={[{ value: '', label: 'Sin categória' }, ...categories.map(c => ({ value: c.nombre, label: c.nombre }))]}
             />
           </Field>
         </div>
@@ -302,6 +312,7 @@ function ProductForm({ editing, onSave, onClose }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function ProductsPage() {
   const [rows, setRows] = useState([]);
+  const categories = useCategories();
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 10 });
   const [search, setSearch] = useState('');
   const [categoria, setCategoria] = useState('');
@@ -383,7 +394,7 @@ export default function ProductsPage() {
               icon={Filter}
               value={categoria}
               onChange={e => setCategoria(e.target.value)}
-              options={[{ value: '', label: 'Todas las categorías' }, ...categoriesList.map(c => ({ value: c, label: c }))]}
+              options={[{ value: '', label: 'Todas las categorías' }, ...categories.map(c => ({ value: c.nombre, label: c.nombre }))]}
             />
           </div>
 
