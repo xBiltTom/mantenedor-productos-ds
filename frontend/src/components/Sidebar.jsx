@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Package, FileText, Hexagon } from 'lucide-react';
 
@@ -9,6 +9,36 @@ const navItems = [
 ];
 
 export default function Sidebar() {
+  const [apiStatus, setApiStatus] = useState('checking'); // 'checking', 'online', 'offline'
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+        const healthUrl = baseUrl.replace(/\/api\/?$/, '/health');
+        
+        // Timeout to avoiding hanging fetches
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch(healthUrl, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+          setApiStatus('online');
+        } else {
+          setApiStatus('offline');
+        }
+      } catch (error) {
+        setApiStatus('offline');
+      }
+    };
+
+    checkStatus();
+    const interval = setInterval(checkStatus, 10000); // check every 10 seconds
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <style>{`
@@ -111,8 +141,24 @@ export default function Sidebar() {
           }}>
             <div style={{ fontSize: '10px', color: '#A8A8A0', fontWeight: 600, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Estado del Sistema</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#22C55E', animation: 'pulse 2s infinite', flexShrink: 0, display: 'inline-block' }} />
-              <span style={{ fontSize: '13px', fontWeight: 600, color: '#0E0E0D' }}>API en línea</span>
+              {apiStatus === 'checking' && (
+                <>
+                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#EAB308', flexShrink: 0, display: 'inline-block' }} />
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#0E0E0D' }}>Verificando...</span>
+                </>
+              )}
+              {apiStatus === 'online' && (
+                <>
+                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#22C55E', animation: 'pulse 2s infinite', flexShrink: 0, display: 'inline-block' }} />
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#0E0E0D' }}>API en línea</span>
+                </>
+              )}
+              {apiStatus === 'offline' && (
+                <>
+                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#EF4444', flexShrink: 0, display: 'inline-block' }} />
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#EF4444' }}>API sin conexión</span>
+                </>
+              )}
             </div>
           </div>
         </div>
